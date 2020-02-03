@@ -27,6 +27,7 @@ namespace nettendo_guswitch {
     //% button.fieldEditor="gridpicker" button.fieldOptions.columns=3
     export function buttonIsPressed(button: NGButtonPin): boolean {
         const pin = <DigitalPin><number>button;
+        pins.setPull(pin, PinPullMode.PullUp);
         return pins.digitalReadPin(pin) == 0;
     }
 }
