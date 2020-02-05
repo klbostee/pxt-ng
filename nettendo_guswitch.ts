@@ -24,28 +24,48 @@ namespace ng {
         return pins.digitalReadPin(pin) == 0;
     }
 
-    let buttonUpHandler: () => void = null;
-    let buttonRightHandler: () => void = null;
-    let buttonDownHandler: () => void = null;
-    let buttonLeftHandler: () => void = null;
-    let buttonAHandler: () => void = null;
-    let buttonBHandler: () => void = null;
-
     //% block="on button %button pressed"
     //% button.fieldEditor="gridpicker" button.fieldOptions.columns=3
     export function onButtonPressed(button: NGButtonPin, handler: () => void) {
+        const pin = <DigitalPin><number>button;
+        pins.setPull(pin, PinPullMode.PullUp);
+        pins.setEvents(pin, PinEventType.Edge);
         if (button == NGButtonPin.Up) {
-            buttonUpHandler = handler;
+            control.onEvent(
+                control.eventSourceId(EventBusSource.MICROBIT_ID_IO_P1),
+                control.eventValueId(EventBusValue.MICROBIT_BUTTON_EVT_CLICK),
+                handler
+            );
         } else if (button == NGButtonPin.Right) {
-            buttonRightHandler = handler;
+            control.onEvent(
+                control.eventSourceId(EventBusSource.MICROBIT_ID_IO_P2),
+                control.eventValueId(EventBusValue.MICROBIT_BUTTON_EVT_CLICK),
+                handler
+            );
         } else if (button == NGButtonPin.Down) {
-            buttonDownHandler = handler;
+            control.onEvent(
+                control.eventSourceId(EventBusSource.MICROBIT_ID_IO_P8),
+                control.eventValueId(EventBusValue.MICROBIT_BUTTON_EVT_CLICK),
+                handler
+            );
         } else if (button == NGButtonPin.Left) {
-            buttonLeftHandler = handler;
+            control.onEvent(
+                control.eventSourceId(EventBusSource.MICROBIT_ID_IO_P16),
+                control.eventValueId(EventBusValue.MICROBIT_BUTTON_EVT_CLICK),
+                handler
+            );
         } else if (button == NGButtonPin.A) {
-            buttonAHandler = handler;
+            control.onEvent(
+                control.eventSourceId(EventBusSource.MICROBIT_ID_IO_P5),
+                control.eventValueId(EventBusValue.MICROBIT_BUTTON_EVT_CLICK),
+                handler
+            );
         } else if (button == NGButtonPin.B) {
-            buttonBHandler = handler;
+            control.onEvent(
+                control.eventSourceId(EventBusSource.MICROBIT_ID_IO_P11),
+                control.eventValueId(EventBusValue.MICROBIT_BUTTON_EVT_CLICK),
+                handler
+            );
         }
     }
 
@@ -63,31 +83,9 @@ namespace ng {
         music.beginMelody(music.builtInMelody(Melodies.PowerUp), MelodyOptions.Once);
         basic.showIcon(IconNames.Heart);
         basic.pause(500);
-        
+
         strip.showColor(neopixel.colors(NeoPixelColors.Black));
         strip.show();
-        
-        basic.forever(function () {
-            if (buttonIsPressed(NGButtonPin.Up) && buttonUpHandler != null) {
-                buttonUpHandler();
-            }
-            if (buttonIsPressed(NGButtonPin.Right) && buttonRightHandler != null) {
-                buttonRightHandler();
-            }
-            if (buttonIsPressed(NGButtonPin.Down) && buttonDownHandler != null) {
-                buttonDownHandler();
-            }
-            if (buttonIsPressed(NGButtonPin.Left) && buttonLeftHandler != null) {
-                buttonLeftHandler();
-            }
-            if (buttonIsPressed(NGButtonPin.A) && buttonAHandler != null) {
-                buttonAHandler();
-            }
-            if (buttonIsPressed(NGButtonPin.B) && buttonBHandler != null) {
-                buttonBHandler();
-            }
-            basic.clearScreen()
-        });
     }
 
 }
