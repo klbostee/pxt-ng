@@ -76,16 +76,4 @@ namespace ng {
         return strip;
     }
 
-    //% block
-    export function startNettendoGuswitch() {
-        basic.clearScreen();
-
-        music.beginMelody(music.builtInMelody(Melodies.PowerUp), MelodyOptions.Once);
-        basic.showIcon(IconNames.Heart);
-        basic.pause(500);
-
-        strip.showColor(neopixel.colors(NeoPixelColors.Black));
-        strip.show();
-    }
-
 }
