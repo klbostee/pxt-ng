@@ -5,7 +5,8 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "neopixel": "github:microsoft/pxt-neopixel#v0.6.12"
+        "neopixel": "github:microsoft/pxt-neopixel#v0.6.12",
+        "pxt-bellekermis": "workspace:02f0253c-59f7-4e6e-8c4a-74dee776c0cb"
     },
     "files": [
         "README.md",
