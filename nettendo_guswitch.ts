@@ -76,16 +76,86 @@ namespace ng {
         return strip;
     }
 
+    let started: boolean = false;
+    let hard: boolean = false;
+
     //% block
-    export function startNettendoGuswitch() {
-        basic.clearScreen();
-
-        music.beginMelody(music.builtInMelody(Melodies.PowerUp), MelodyOptions.Once);
-        basic.showIcon(IconNames.Heart);
-        basic.pause(500);
-
-        strip.showColor(neopixel.colors(NeoPixelColors.Black));
+    export function startWithIcon(icon: IconNames) {
+        strip.clear();
         strip.show();
+
+        radio.setGroup(23);
+        radio.sendNumber(0);
+
+        input.onGesture(Gesture.Shake, function () {
+            control.reset();
+        })
+
+        kermis.onKermisNotePlayed(function () {
+            strip.rotate(1);
+            strip.show();
+        })
+
+        basic.showIcon(icon);
+        while (true) {
+            if (input.buttonIsPressed(Button.A)) {
+                hard = false;
+                break;
+            } else if (input.buttonIsPressed(Button.B)) {
+                hard = true;
+                break;
+            }
+        }
+        basic.clearScreen();
+        basic.pause(1000);
+        started = true;
     }
 
+    //% block
+    export function hasStarted(): boolean {
+        return started;
+    }
+
+    //% block
+    export function hardWasChosen(): boolean {
+        return hard;
+    }
+
+    //% block
+    export function incrementScore() {
+        game.addScore(1);
+        radio.sendNumber(game.score());
+        if (game.score() == 10) {
+            // woohoo!
+            game.pause(); // pause rendering engine
+            input.onButtonPressed(Button.A, function () {
+                strip.showRainbow(1, 360);
+                kermis.playFirstPartOfKermisChorus();
+                strip.showColor(neopixel.colors(NeoPixelColors.Black));
+                strip.show();
+            })
+            input.onButtonPressed(Button.B, function () {
+                strip.showRainbow(1, 360);
+                kermis.playSecondPartOfKermisChorus();
+                strip.showColor(neopixel.colors(NeoPixelColors.Black));
+                strip.show();
+            })
+            basic.clearScreen();
+            let count = 0;
+            while (true) {
+                count += 1;
+                if (count % 2 == 0) {
+                    basic.showIcon(IconNames.SmallHeart);
+                } else {
+                    basic.showIcon(IconNames.Heart);
+                }
+                basic.pause(100);
+            }
+        }
+    }
+
+    //% block
+    export function gameOver() {
+        game.gameOver();
+    }
 }
