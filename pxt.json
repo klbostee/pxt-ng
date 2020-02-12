@@ -6,7 +6,7 @@
         "core": "*",
         "radio": "*",
         "neopixel": "github:microsoft/pxt-neopixel#v0.6.12",
-        "pxt-bellekermis": "workspace:02f0253c-59f7-4e6e-8c4a-74dee776c0cb"
+        "bellekermis": "github:klbostee/pxt-bellekermis#v0.0.3"
     },
     "files": [
         "README.md",
